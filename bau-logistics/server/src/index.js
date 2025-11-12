@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import authRoutes from './routes/auth.js';
@@ -15,7 +16,12 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
-const PORT = process.env.PORT || 3001;
+const PORT = Number.parseInt(process.env.PORT ?? '3001', 10);
+
+if (!process.env.JWT_SECRET) {
+  console.warn('Warning: JWT_SECRET is not set. Authentication will fail until it is configured.');
+}
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
